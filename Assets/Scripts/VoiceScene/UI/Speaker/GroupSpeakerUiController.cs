@@ -24,7 +24,7 @@ namespace VoiceScene.UI.Speaker {
         /// </summary>
         internal void Initialize(Action<bool> clickAction) {
             _clickAction = clickAction;
-            SetText(_muteState);
+            SetImage(_muteState);
             
             muteButton.onClick.AddListener(ClickInternal);
         }
@@ -38,6 +38,13 @@ namespace VoiceScene.UI.Speaker {
                 muteButton.onClick.Invoke();
             }
         }
+        
+        internal void SetImageExternal(bool muteState) {
+            if (_muteState != muteState) {
+                _muteState = muteState;
+                SetImage(muteState);
+            }
+        }
 
         /// <summary>
         /// Сама функция мута
@@ -46,10 +53,10 @@ namespace VoiceScene.UI.Speaker {
             _muteState = !_muteState;
             
             _clickAction.Invoke(_muteState);
-            SetText(_muteState);
+            SetImage(_muteState);
         }
 
-        private void SetText(bool muteState) {
+        private void SetImage(bool muteState) {
             muteButtonImage.sprite = muteState
                 ? muteSprite
                 : playSprite;

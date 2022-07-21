@@ -130,18 +130,23 @@ namespace VoiceScene.Logic {
             }
 
             var newListenGroups = _groupsToListen.ToArray();
-            if (newListenGroups.Length == 0) {
-                //ToDo: почти: это будет полезно при полном мьюет комнаты, а не мьюет команды
-                // Debug.Log("Locking voice network as there are no clients to listen!");
-                // PhotonVoiceNetwork.Instance.Disconnect();
-            } else {
-                Debug.Log($"Changing groups of interest: [{string.Join(";", newListenGroups)}]");
-                StartCoroutine(VoiceStateHandler.Instance.PerformAction(() => PhotonVoiceNetwork.Instance.Client.OpChangeGroups(_currentListenGroups, newListenGroups)));
-            }
+            
+            Debug.Log($"Changing groups of interest: [{string.Join(";", newListenGroups)}]");
+            StartCoroutine(VoiceStateHandler.Instance.PerformAction(() => PhotonVoiceNetwork.Instance.Client.OpChangeGroups(_currentListenGroups, newListenGroups)));
             
             _currentListenGroups = newListenGroups;
             
             _wasModified = false;
+        }
+
+        internal void Unmute() {
+            _wasModified = true;
+        }
+        
+        internal void MuteAll() {
+            _wasModified = false;
+            Debug.Log("Locking voice network as there are no clients to listen!");
+            PhotonVoiceNetwork.Instance.Disconnect();
         }
 
 #endregion

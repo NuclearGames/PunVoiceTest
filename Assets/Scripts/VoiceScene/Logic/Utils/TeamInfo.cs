@@ -25,30 +25,6 @@ namespace VoiceScene.Logic.Utils {
             _playersCollection = new Dictionary<string, PlayerVoiceInfo>(size);
         }
 
-        // internal bool Remove(Player player) {
-        //     if (player == null) {
-        //         return false;
-        //     }
-        //
-        //     return _playersCollection.Remove(player.NickName);
-        // }
-        //
-        // internal bool Remove(string nickName) {
-        //     if (string.IsNullOrEmpty(nickName)) {
-        //         return false;
-        //     }
-        //
-        //     return _playersCollection.Remove(nickName);
-        // }
-        //
-        // internal bool Contains(string nickName) {
-        //     if (string.IsNullOrEmpty(nickName)) {
-        //         return false;
-        //     }
-        //
-        //     return _playersCollection.ContainsKey(nickName);
-        // }
-
         internal bool TryGetByName(string nickName, out PlayerVoiceInfo info) {
             return _playersCollection.TryGetValue(nickName, out info);
         }

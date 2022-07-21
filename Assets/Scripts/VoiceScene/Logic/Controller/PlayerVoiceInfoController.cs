@@ -9,6 +9,7 @@ namespace VoiceScene.Logic.Controller {
     /// </summary>
     internal sealed class PlayerVoiceInfoController : MonoBehaviour {
         internal event Action<bool> onMuteStateChanged;
+        internal event Action<PlayerVoiceInfoController, bool, bool> onExtendedMuteStateChanged;
         
         /// <summary>
         /// Игрок
@@ -27,6 +28,7 @@ namespace VoiceScene.Logic.Controller {
 
                 _muted = value;
                 onMuteStateChanged?.Invoke(_muted);
+                onExtendedMuteStateChanged?.Invoke(this, _isLocalTeam, _muted);
             }
         }
 

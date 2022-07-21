@@ -53,7 +53,7 @@ namespace VoiceScene.Logic.Controller {
             });
         } 
         private void SetMuteStateForEnemies(bool muteState) {
-            _teammates.ForEach(voiceInfoController => {
+            _enemies.ForEach(voiceInfoController => {
                 if (voiceInfoController.Muted != muteState) {
                     voiceInfoController.ChangeMuteState();
                 }

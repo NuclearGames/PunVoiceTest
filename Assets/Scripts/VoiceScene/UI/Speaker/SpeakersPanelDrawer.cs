@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using VoiceScene.Logic;
 using VoiceScene.Logic.Controller;
+using VoiceScene.Logic.Utils;
 
 namespace VoiceScene.UI.Speaker {
 
@@ -14,9 +15,9 @@ namespace VoiceScene.UI.Speaker {
         [SerializeField]
         private TeamSpeakersDrawer[] teamSpeakersDrawers;
 
-        internal void DrawSpeaker(PlayerVoiceInfoController voiceInfoController) {
+        internal void DrawSpeaker(TeamInfo teamInfo, PlayerVoiceInfoController voiceInfoController) {
             var voiceInfo = voiceInfoController.NetworkVoiceInfo;
-            teamSpeakersDrawers[voiceInfo.TeamIndex].DrawSpeaker(voiceInfoController);
+            teamSpeakersDrawers[voiceInfo.TeamIndex].DrawSpeaker(voiceInfoController, teamInfo.IsLocal);
         }
     }
 }

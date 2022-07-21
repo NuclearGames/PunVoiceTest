@@ -16,6 +16,9 @@ namespace VoiceScene.UI.Speaker {
         private Button muteButton;
         [SerializeField]
         private Text muteButtonText;
+        [Space]
+        [SerializeField]
+        private Image backgroundImage;
 
         [Space]
         [SerializeField]
@@ -23,7 +26,13 @@ namespace VoiceScene.UI.Speaker {
         [SerializeField]
         private string muteTextValue;
 
-        internal void Initialize(PlayerVoiceInfoController voiceInfoController) {
+        [Space]
+        [SerializeField]
+        private Color localColor;
+        [SerializeField]
+        private Color enemyColor;
+
+        internal void Initialize(PlayerVoiceInfoController voiceInfoController, bool isLocal) {
             var player = voiceInfoController.NetworkVoiceInfo.Player;
             
             userNameText.text = player.NickName;
@@ -31,6 +40,8 @@ namespace VoiceScene.UI.Speaker {
             
             voiceInfoController.onMuteStateChanged += SwitchMuteText;
             muteButton.onClick.AddListener(voiceInfoController.ChangeMuteState);
+
+            backgroundImage.color = isLocal ? localColor : enemyColor;
         }
 
         private void SwitchMuteText(bool muted) {

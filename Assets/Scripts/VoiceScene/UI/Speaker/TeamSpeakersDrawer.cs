@@ -1,9 +1,5 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using Utilities.Extensions;
-using VoiceScene.Logic;
+﻿using UnityEngine;
 using VoiceScene.Logic.Controller;
-using VoiceScene.Logic.Utils;
 
 namespace VoiceScene.UI.Speaker {
     /// <summary>
@@ -11,17 +7,13 @@ namespace VoiceScene.UI.Speaker {
     /// </summary>
     internal sealed class TeamSpeakersDrawer : MonoBehaviour {
         [SerializeField]
-        private VoiceInterestGroupsHandler voiceInterestGroupsHandler;
-        
-        [Space]
-        [SerializeField]
         private GameObject playerUiContainer;
 
-        internal void DrawSpeaker(PlayerVoiceInfoController voiceInfoController) {
+        internal void DrawSpeaker(PlayerVoiceInfoController voiceInfoController, bool isLocal) {
             var go = Instantiate(playerUiContainer, transform);
             
             var uiController = go.GetComponentInChildren<SpeakerUiController>(true);
-            uiController.Initialize(voiceInfoController);
+            uiController.Initialize(voiceInfoController, isLocal);
             
             go.name = voiceInfoController.NetworkVoiceInfo.Player.NickName;
         }

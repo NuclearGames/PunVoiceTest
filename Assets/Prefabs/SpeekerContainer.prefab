@@ -409,9 +409,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed868d309f6e4bdc84bef17e0810f848, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speakerController: {fileID: 1672853773261782331}
   userNameText: {fileID: 8340275992234072195}
   muteButton: {fileID: 8340275992442466501}
   muteButtonText: {fileID: 8340275992327490407}
+  backgroundImage: {fileID: 8340275992757160392}
   playTextValue: On
   muteTextValue: Off
+  localColor: {r: 0.5272017, g: 0.9622642, b: 0.31318974, a: 1}
+  enemyColor: {r: 1, g: 0.4764151, b: 0.4764151, a: 1}

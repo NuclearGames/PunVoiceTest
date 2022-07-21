@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3757680412787117893}
   - component: {fileID: 3757680412787117892}
   - component: {fileID: 2194872881122981842}
+  - component: {fileID: 8723723058981127602}
   m_Layer: 0
   m_Name: NetworkSpeeker
   m_TagString: Untagged
@@ -85,6 +86,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4f6ed8087c334f08bb1efa706e2b8148, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  photonView: {fileID: 3757680412787117893}
+  photonVoiceView: {fileID: 3757680412787117892}
+  audioSource: {fileID: 3757680412943801997}
+  voiceInfoController: {fileID: 8723723058981127602}
+--- !u!114 &8723723058981127602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3757680412787117890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25a9977440e9452bb753a2b858990896, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3757680412943801994

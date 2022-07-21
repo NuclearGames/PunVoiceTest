@@ -56,11 +56,11 @@ namespace VoiceScene.Logic {
             SetGroupOfInterest(team, playerVoiceInfo);
             RegisterInGroupSpeaker();
             
-            DrawSpeaker(playerVoiceInfo);
+            DrawSpeaker(team);
         }
 
         private void SetGroupOfInterest(TeamInfo teamInfo, PlayerVoiceInfo voiceInfo) {
-            var voiceInterestGroupsHandler = ObjectExtensions.FindSingleInScene<VoiceInterestGroupsHandler>();
+            var voiceInterestGroupsHandler = FindObjectOfType<VoiceInterestGroupsHandler>();
             voiceInfoController.Initialize(voiceInterestGroupsHandler, voiceInfo, teamInfo.IsLocal);
             
             if (teamInfo.IsLocal && !voiceInfo.Player.IsLocal) {
@@ -69,13 +69,13 @@ namespace VoiceScene.Logic {
         }
 
         private void RegisterInGroupSpeaker() {
-            var groupSpeakerUi = ObjectExtensions.FindSingleInScene<GroupSpeakerController>();
+            var groupSpeakerUi = FindObjectOfType<GroupSpeakerController>();
             groupSpeakerUi.RegisterVoiceController(voiceInfoController);
         }
         
-        private void DrawSpeaker(PlayerVoiceInfo voiceInfo) {
-            var speakerDrawer = ObjectExtensions.FindSingleInScene<SpeakersPanelDrawer>();
-            speakerDrawer.DrawSpeaker(voiceInfoController);
+        private void DrawSpeaker(TeamInfo teamInfo) {
+            var speakerDrawer = FindObjectOfType<SpeakersPanelDrawer>();
+            speakerDrawer.DrawSpeaker(teamInfo, voiceInfoController);
         }
 
 

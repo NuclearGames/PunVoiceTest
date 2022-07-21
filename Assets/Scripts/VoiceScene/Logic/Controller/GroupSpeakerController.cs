@@ -61,8 +61,8 @@ namespace VoiceScene.Logic.Controller {
         }
 
         private void SetMuteStateForAll(bool muteState) {
-            SetMuteStateForTeammates(muteState);
-            SetMuteStateForEnemies(muteState);
+            teammateGroupUi.MuteExternal(muteState);
+            enemyGroupUi.MuteExternal(muteState);
         }
 
 #endregion

@@ -7,13 +7,13 @@ namespace VoiceScene.UI.Speaker {
         [SerializeField]
         private Button muteButton;
         [SerializeField]
-        private Text muteButtonText;
+        private Image muteButtonImage;
         
         [Space]
         [SerializeField]
-        private string playTextValue;
+        private Sprite playSprite;
         [SerializeField]
-        private string muteTextValue;
+        private Sprite muteSprite;
 
 
         private bool _muteState = false;
@@ -25,6 +25,8 @@ namespace VoiceScene.UI.Speaker {
         internal void Initialize(Action<bool> clickAction) {
             _clickAction = clickAction;
             SetText(_muteState);
+            
+            muteButton.onClick.AddListener(ClickInternal);
         }
         
         /// <summary>
@@ -48,9 +50,24 @@ namespace VoiceScene.UI.Speaker {
         }
 
         private void SetText(bool muteState) {
-            muteButtonText.text = muteState
-                ? muteTextValue
-                : playTextValue;
+            muteButtonImage.sprite = muteState
+                ? muteSprite
+                : playSprite;
         }
+        
+#if UNITY_EDITOR
+
+        private void OnValidate() {
+            if (ReferenceEquals(muteButton, null)) {
+                muteButton = GetComponentInChildren<Button>();
+            }
+            
+            if (ReferenceEquals(muteButtonImage, null)) {
+                muteButtonImage = muteButton.GetComponent<Image>();
+            }
+
+        }
+
+#endif
     }
 }

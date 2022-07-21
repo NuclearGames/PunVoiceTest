@@ -7,6 +7,7 @@ using Utilities.Extensions;
 using VoiceScene.Logic.Controller;
 using VoiceScene.Logic.InstantiateArgs;
 using VoiceScene.Logic.Utils;
+using VoiceScene.UI.Recorders;
 using VoiceScene.UI.Speaker;
 
 namespace VoiceScene.Logic {
@@ -56,6 +57,10 @@ namespace VoiceScene.Logic {
             SetGroupOfInterest(team, playerVoiceInfo);
             RegisterInGroupSpeaker();
             
+            if(player.IsLocal) {
+                SetUpRecorder();
+            }
+            
             DrawSpeaker(team);
         }
 
@@ -71,6 +76,11 @@ namespace VoiceScene.Logic {
         private void RegisterInGroupSpeaker() {
             var groupSpeakerUi = FindObjectOfType<GroupSpeakerController>();
             groupSpeakerUi.RegisterVoiceController(voiceInfoController);
+        }
+
+        private void SetUpRecorder() {
+            var recorderUi = FindObjectOfType<RecorderUi>();
+            recorderUi.Initialize(voiceInfoController);
         }
         
         private void DrawSpeaker(TeamInfo teamInfo) {

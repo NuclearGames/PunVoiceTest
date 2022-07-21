@@ -6015,8 +6015,9 @@ MonoBehaviour:
   voiceDetection: 1
   voiceDetectionThreshold: 0.01
   voiceDetectionDelayMs: 500
-  unityMicrophoneDevice: Microphone Array (Realtek High Definition Audio)
-  photonMicrophoneDeviceId: 0
+  unityMicrophoneDevice: "\u0413\u043E\u043B\u043E\u0432\u043D\u043E\u0439 \u0442\u0435\u043B\u0435\u0444\u043E\u043D
+    (Soundcore Liberty Air 2 Pro Hands-Free AG Audio)"
+  photonMicrophoneDeviceId: -1
   interestGroup: 0
   debugEchoMode: 0
   reliableMode: 0
@@ -6030,7 +6031,7 @@ MonoBehaviour:
   audioClip: {fileID: 0}
   loopAudioClip: 1
   reactOnSystemChanges: 0
-  autoStart: 1
+  autoStart: 0
   audioSessionParameters:
     Category: 4
     Mode: 0
@@ -6098,7 +6099,7 @@ MonoBehaviour:
   AutoCreateSpeakerIfNotFound: 1
   MaxDatagrams: 3
   SendAsap: 0
-  AutoConnectAndJoin: 1
+  AutoConnectAndJoin: 0
   AutoLeaveAndDisconnect: 1
   WorkInOfflineMode: 1
   usePunAppSettings: 1

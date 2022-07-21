@@ -9,6 +9,7 @@
 /[Bb]uilds/
 /[Ll]ogs/
 /[Mm]emoryCaptures/
+/[Uu]serSettings/
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta
@@ -58,3 +59,57 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+# Common IntelliJ Platform excludes
+
+# User specific
+**/.idea/**/workspace.xml
+**/.idea/**/tasks.xml
+**/.idea/shelf/*
+**/.idea/dictionaries
+**/.idea/httpRequests/
+
+# Sensitive or high-churn files
+**/.idea/**/dataSources/
+**/.idea/**/dataSources.ids
+**/.idea/**/dataSources.xml
+**/.idea/**/dataSources.local.xml
+**/.idea/**/sqlDataSources.xml
+**/.idea/**/dynamic.xml
+
+# Rider
+# Rider auto-generates .iml files, and contentModel.xml
+**/.idea/**/*.iml
+**/.idea/**/contentModel.xml
+**/.idea/**/modules.xml
+
+*.suo
+*.user
+.vs/
+[Bb]in/
+[Oo]bj/
+_UpgradeReport_Files/
+[Pp]ackages/
+
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+.idea
+/Assets/Plugins.meta
+
+/.vsconfig
+/Assets/Firebase/Plugins/x86_64/FirebaseCppApp-8_2_0.so
+/Assets/Firebase/Plugins/x86_64/FirebaseCppApp-8_2_0.so.meta
+ProjectSettings/ProjectVersion.txt
+/Assets/DataSet/
+/Assets/DataSet.meta
+
+firebase*/lib
+firebase*/node_modules/
+firebase*/secrets/
+firebase*/.nyc*/
+firebase*/resources/*
+!/firebase*/resources/templates/
+/Assets/Plugins/CodeStage/AntiCheatToolkit/Integration/BehaviorDesigner.unitypackage.meta
+/Assets/Plugins/CodeStage/AntiCheatToolkit/Integration/PlayMaker.unitypackage.meta
+/ML/run_commands.txt

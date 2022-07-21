@@ -33,43 +33,7 @@ namespace VoiceScene.Logic.Utils {
 
             IsInitialized = true;
         }
-
-        // #region Record control
-//
-//         /// <summary>
-//         /// Вещает в броадкаст (всем)
-//         /// </summary>
-//         internal void BroadCastRecord() {
-//             Recorder.IsRecording = false;
-//             SetRecordGroup(0);
-//             Recorder.IsRecording = true;
-//         }
-//
-//         /// <summary>
-//         /// Вещает в дефолтную группу
-//         /// </summary>
-//         internal void CastDefaultRecord() {
-//             Recorder.IsRecording = false;
-//             SetRecordGroup(DefaultRecordGroup);
-//             Recorder.IsRecording = true;
-//         }
-//
-//         /// <summary>
-//         /// Останавливает запись
-//         /// </summary>
-//         internal void StopRecord() {
-//             Recorder.IsRecording = false;   
-//         }
-//
-// #endregion
-//         
-//         /// <summary>
-//         /// Устанавливает группу интересов для записи
-//         /// </summary>
-//         private void SetRecordGroup(byte group) {
-//             Recorder.InterestGroup = group;
-//         }
-
+        
 #region Utils
 
         internal class PlayerVoiceInfoComponents {

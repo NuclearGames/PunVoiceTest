@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using VoiceScene.Logic;
+using VoiceScene.Logic.Controller;
 
 namespace VoiceScene.UI.Speaker {
     /// <summary>

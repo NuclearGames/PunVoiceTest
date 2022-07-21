@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using VoiceScene.Logic;
+using VoiceScene.Logic.Controller;
 
 namespace VoiceScene.UI.Speaker {
 

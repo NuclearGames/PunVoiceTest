@@ -2,7 +2,7 @@
 using UnityEngine;
 using VoiceScene.Logic.Utils;
 
-namespace VoiceScene.Logic {
+namespace VoiceScene.Logic.Controller {
     /// <summary>
     /// Элемнет управления воспроизведением для конкретного игрока
     /// <para>Биндит UI с <seealso cref="PlayerVoiceInfo"/></para>

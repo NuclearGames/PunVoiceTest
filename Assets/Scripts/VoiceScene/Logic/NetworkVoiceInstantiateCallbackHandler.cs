@@ -4,6 +4,7 @@ using Photon.Pun;
 using Photon.Voice.PUN;
 using UnityEngine;
 using Utilities.Extensions;
+using VoiceScene.Logic.Controller;
 using VoiceScene.Logic.InstantiateArgs;
 using VoiceScene.Logic.Utils;
 using VoiceScene.UI.Speaker;
@@ -68,7 +69,7 @@ namespace VoiceScene.Logic {
         }
 
         private void RegisterInGroupSpeaker() {
-            var groupSpeakerUi = ObjectExtensions.FindSingleInScene<GroupSpeakerUi>();
+            var groupSpeakerUi = ObjectExtensions.FindSingleInScene<GroupSpeakerController>();
             groupSpeakerUi.RegisterVoiceController(voiceInfoController);
         }
         

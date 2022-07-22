@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Threading.Tasks;
-using Photon.Pun;
 using Photon.Realtime;
 using Photon.Voice.PUN;
 using UnityEngine;

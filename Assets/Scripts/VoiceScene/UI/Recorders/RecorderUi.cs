@@ -73,10 +73,12 @@ namespace VoiceScene.UI.Recorders {
                 return;
             }
             
+            _recorder.TransmitEnabled = true;
             StartCoroutine(VoiceStateHandler.Instance.PerformAction(_recorder.StartRecording));
         }
         
         private void DeactivateMic() {
+            _recorder.TransmitEnabled = false;
             _recorder.StopRecording();
         }
         

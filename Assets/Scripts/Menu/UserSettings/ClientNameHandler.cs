@@ -14,21 +14,36 @@ namespace Menu.UserSettings {
             var nickName = $"User {Random.Range(0, 1000)}";
             userNameInputField.SetTextWithoutNotify(nickName);
             PhotonNetwork.NickName = nickName;
-            
-            userNameInputField.onEndEdit.AddListener(OnEndEditName);
+
+            SetUpSubscriber();
         }
 
+        
+        
+#if UNITY_EDITOR
+        private void SetUpSubscriber() {
+            userNameInputField.onEndEdit.AddListener(OnEndEditName);
+        }
+        
         private void OnEndEditName(string value) {
             PhotonNetwork.NickName = value;
             
             Debug.Log($"New User NickName: '{PhotonNetwork.NickName}'");
         }
         
-#if UNITY_EDITOR
         private void OnValidate() {
             if (ReferenceEquals(userNameInputField, null)) {
                 userNameInputField = GetComponentInChildren<InputField>();
             }
+        }
+#else
+
+        private void SetUpSubscriber() {
+            userNameInputField.onValueChanged.AddListener(OnValueChanged);
+        }
+        
+        private void OnValueChanged(string value) {
+            PhotonNetwork.NickName = value;
         }
 #endif
     }

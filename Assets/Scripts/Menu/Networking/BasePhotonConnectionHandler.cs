@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections;
 using Menu.RoomConnect.UI;
-using Menu.RoomSettings;
 using Photon.Pun;
 using Photon.Realtime;
 using UI;
 using UnityEngine;
-using UnityEngine.UI;
 
-namespace Menu.RoomConnect {
-    internal sealed class PhotonConnectionHandler : MonoBehaviourPunCallbacks {
+namespace Menu.Networking {
+    internal abstract class BasePhotonConnectionHandler : MonoBehaviourPunCallbacks {
         [Header("Settings")]
         [SerializeField]
         private string version = "0.0.1";
@@ -20,22 +18,16 @@ namespace Menu.RoomConnect {
 
         [SerializeField]
         private float connectToLobbyTime = 1f;
-
-        [Header("Components")]
-        [SerializeField]
-        private NewRoomPlayersCountHandler playersCountHandler;
-
-        [Space]
-        [SerializeField]
-        private Button joinRandomRoomButton;
-        [SerializeField]
-        private Button createRoomButton;
+        
+        
 
         private bool _masterConnected;
         private bool _lobbyConnected;
-        private Func<bool> _onSuccessConnectAction;
+        
+        private bool _invokeRequested;
+        private protected Func<bool> OnSuccessConnectAction;
 
-        private readonly RoomOptions _createRoomOptions = new RoomOptions {
+        private protected readonly RoomOptions CreateRoomOptions = new RoomOptions {
             IsOpen = true,
             IsVisible = true,
             PlayerTtl = 2000,
@@ -49,44 +41,52 @@ namespace Menu.RoomConnect {
 #region Monobehaviour
 
         private void Awake() {
-            SetUp();
-                
-            playersCountHandler.onPlayersCountChanged += OnPlayersCountChanged;
-            _createRoomOptions.MaxPlayers = playersCountHandler.PlayersCount;
-            
-            joinRandomRoomButton.onClick.AddListener(ConnectToExistedRoom);
-            createRoomButton.onClick.AddListener(CreateNewRoom);
+            InitializeInternal();
         }
 
 #endregion
+
+        private static bool _isInitialized;
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        private static void Initialize() {
+            if (_isInitialized) {
+                return;
+            }
+            
+            PhotonNetwork.AutomaticallySyncScene = true;
+            PhotonNetwork.MinimalTimeScaleToDispatchInFixedUpdate = 0;
+            PhotonNetwork.NetworkingClient.LoadBalancingPeer.ReuseEventInstance = true;
+            PhotonNetwork.NetworkingClient.LoadBalancingPeer.UseByteArraySlicePoolForEvents = true;
+
+            _isInitialized = true;
+        }
         
-        /// <summary>
-        /// Пытается подключиться к случайной существующей комнате
-        /// </summary>
-        private void ConnectToExistedRoom() {
-            _onSuccessConnectAction = PhotonNetwork.JoinRandomRoom;
+        private protected abstract void InitializeInternal();
+        
+        private void ResetConnectionStates() {
+            _invokeRequested = false;
+            
+            _masterConnected = false;
+            _lobbyConnected = false;
+            OnSuccessConnectAction = null;
 
-            ConnectToPhoton();
-            StartCoroutine(ConnectionStateHandler());
+            ResetConnectionStatesInternal();
         }
 
-        /// <summary>
-        /// Пытается создать комнату
-        /// </summary>
-        private void CreateNewRoom() {
-            _onSuccessConnectAction = CreateRoom;
+        private protected virtual void ResetConnectionStatesInternal() { }
 
-            ConnectToPhoton();
-            StartCoroutine(ConnectionStateHandler());
-        }
-
+#region PhotonNetwork
+        
         /// <summary>
         /// Выполняет подключение к фотону
         /// </summary>
-        private void ConnectToPhoton() {
+        private protected void ConnectToPhoton() {
             if (PhotonNetwork.IsConnected) {
                 throw new Exception("Client has been already connected!");
             }
+            
+            _invokeRequested = true;
 
             PhotonNetwork.ConnectUsingSettings();
             PhotonNetwork.GameVersion = version;
@@ -95,31 +95,17 @@ namespace Menu.RoomConnect {
         /// <summary>
         /// Функция создания комнаты с настройками
         /// </summary>
-        private bool CreateRoom() {
-            return PhotonNetwork.CreateRoom(Guid.NewGuid().ToString(), _createRoomOptions);
+        private protected bool CreateRoomInternal(string roomName) {
+            return PhotonNetwork.CreateRoom(roomName, CreateRoomOptions);
         }
 
-#region PhotonNetwork
-
-        private void SetUp() {
-            PhotonNetwork.AutomaticallySyncScene = true;
-            PhotonNetwork.MinimalTimeScaleToDispatchInFixedUpdate = 0;
-            PhotonNetwork.NetworkingClient.LoadBalancingPeer.ReuseEventInstance = true;
-            PhotonNetwork.NetworkingClient.LoadBalancingPeer.UseByteArraySlicePoolForEvents = true;
-        }
-
-        private void ResetConnectionStates() {
-            _masterConnected = false;
-            _lobbyConnected = false;
-            _onSuccessConnectAction = null;
-        }
 
 #region Server connection callbacks
 
         /// <summary>
         /// Фононвый контрроллер состояния подключения
         /// </summary>
-        private IEnumerator ConnectionStateHandler() {
+        private protected IEnumerator ConnectionStateHandler() {
             float startTime = Time.time;
 
             yield return new WaitWhile(() => (Time.time - startTime) < connectToMasterServerTime || !_masterConnected);
@@ -143,8 +129,11 @@ namespace Menu.RoomConnect {
         /// При подключении к мастер-серверу
         /// </summary>
         public override void OnConnectedToMaster() {
-            Debug.Log(
-                "OnConnectedToMaster() was called by PUN. This client is now connected to Master Server in region [" + PhotonNetwork.CloudRegion + "] and can join a lobby/room. Calling: PhotonNetwork.JoinLobby();");
+            if (!_invokeRequested) {
+                return;
+            }
+            
+            Debug.Log("OnConnectedToMaster() was called by PUN. This client is now connected to Master Server in region [" + PhotonNetwork.CloudRegion + "] and can join a lobby/room. Calling: PhotonNetwork.JoinLobby();");
 
             if (_masterConnected) {
                 return;
@@ -158,6 +147,10 @@ namespace Menu.RoomConnect {
         /// При подключении к лобби
         /// </summary>
         public override void OnJoinedLobby() {
+            if (!_invokeRequested) {
+                return;
+            }
+            
             Debug.Log("OnJoinedLobby(). This client is now connected to Relay in region [" + PhotonNetwork.CloudRegion +"].");
 
             if (_lobbyConnected) {
@@ -166,14 +159,14 @@ namespace Menu.RoomConnect {
             
             _lobbyConnected = true;
             
-            if (_onSuccessConnectAction == null) {
+            if (OnSuccessConnectAction == null) {
                 MsgBox.Instance.Open("Can't execute empty room-connect action!");
                 PhotonNetwork.Disconnect();
 
                 return;
             }
 
-            if (!_onSuccessConnectAction()) {
+            if (!OnSuccessConnectAction()) {
                 MsgBox.Instance.Open("Failed join random or create room");
                 PhotonNetwork.Disconnect();
 
@@ -185,20 +178,38 @@ namespace Menu.RoomConnect {
         /// При успешном подключении к комнате
         /// </summary>
         public override void OnJoinedRoom() {
-            ConnectionWindow.Instance.Open();
+            if (!_invokeRequested) {
+                return;
+            }
+
+            OnJoinedRoomInternal();
         }
 
+        private protected abstract void OnJoinedRoomInternal();
+
         public override void OnJoinRandomFailed(short returnCode, string message) {
+            if (!_invokeRequested) {
+                return;
+            }
+            
             MsgBox.Instance.Open($"Не удалось подключиться к случайной комнате: {message}");
             PhotonNetwork.Disconnect();
         }
 
         public override void OnJoinRoomFailed(short returnCode, string message) {
+            if (!_invokeRequested) {
+                return;
+            }
+            
             MsgBox.Instance.Open($"Не удалось создать комнату: {message}");
             PhotonNetwork.Disconnect();
         }
 
         public override void OnLeftRoom() {
+            if (!_invokeRequested) {
+                return;
+            }
+            
             PhotonNetwork.Disconnect();
         }
 
@@ -214,26 +225,5 @@ namespace Menu.RoomConnect {
 #endregion
 
 #endregion
-
-#region Subscriptions
-
-        /// <summary>
-        /// При изменении кол-ва игроков
-        /// </summary>
-        private void OnPlayersCountChanged(int playersCount) {
-            _createRoomOptions.MaxPlayers = Convert.ToByte(playersCount);
-        }
-
-#endregion
-        
-#if UNITY_EDITOR
-
-        private void OnValidate() {
-            if (ReferenceEquals(playersCountHandler, null)) {
-                playersCountHandler = GetComponentInChildren<NewRoomPlayersCountHandler>();
-            }
-        }
-
-#endif
     }
 }

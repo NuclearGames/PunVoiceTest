@@ -146,7 +146,10 @@ namespace VoiceScene.Logic {
         internal void MuteAll() {
             _wasModified = false;
             Debug.Log("Locking voice network as there are no clients to listen!");
-            PhotonVoiceNetwork.Instance.Disconnect();
+            
+            if(PhotonVoiceNetwork.Instance.Client.IsConnected) {
+                PhotonVoiceNetwork.Instance.Disconnect();
+            }
         }
 
 #endregion

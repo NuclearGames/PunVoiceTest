@@ -5,10 +5,12 @@ using Photon.Voice.PUN;
 using Photon.Voice.Unity;
 using UnityEngine;
 using UnityEngine.UI;
+using VoiceScene.Logic;
 using VoiceScene.Logic.Controller;
 
 namespace VoiceScene.UI.Recorders {
     internal sealed class RecorderUi: MonoBehaviour {
+        [Space]
         [SerializeField]
         private ButtonContainer lockMicroContainer;
         [SerializeField]
@@ -28,14 +30,10 @@ namespace VoiceScene.UI.Recorders {
             yield return allMicroContainer;
         }
 
+        private int _lastState = -1;
         private Recorder _recorder;
         private PlayerVoiceInfoController _voiceInfoController;
-
-        private void Start() {
-            lockMicroContainer.button.onClick.AddListener(LockMicroCall);
-            teamMicroContainer.button.onClick.AddListener(SetUpMicroForTeam);
-            allMicroContainer.button.onClick.AddListener(SetUpMicroForAll);
-        }
+        private readonly IDictionary<int, Action> _stateActionIndexMap = new Dictionary<int, Action>();
 
         internal void Initialize(PlayerVoiceInfoController localPlayerVoiceController) {
             _voiceInfoController = localPlayerVoiceController;
@@ -47,21 +45,24 @@ namespace VoiceScene.UI.Recorders {
         private void LockMicroCall() {
             DeactivateMic();
 
-            DeactivateButton(0);
+            _lastState = 0;
+            DeactivateButton(_lastState);
         }
 
         private void SetUpMicroForTeam() {
             _recorder.InterestGroup = _voiceInfoController.NetworkVoiceInfo.DefaultRecordGroup;
             ActivateMic();
             
-            DeactivateButton(1);
+            _lastState = 1;
+            DeactivateButton(_lastState);
         }
         
         private void SetUpMicroForAll() {
             _recorder.InterestGroup = 0;
             ActivateMic();
             
-            DeactivateButton(2);
+            _lastState = 2;
+            DeactivateButton(_lastState);
         }
 
         private void ActivateMic() {
@@ -71,6 +72,42 @@ namespace VoiceScene.UI.Recorders {
         private void DeactivateMic() {
             _recorder.StopRecording();
         }
+        
+#region Monobehaviours
+
+        private void Start() {
+            lockMicroContainer.button.onClick.AddListener(LockMicroCall);
+            teamMicroContainer.button.onClick.AddListener(SetUpMicroForTeam);
+            allMicroContainer.button.onClick.AddListener(SetUpMicroForAll);
+
+            _stateActionIndexMap.Add(0, LockMicroCall);
+            _stateActionIndexMap.Add(1, SetUpMicroForTeam);
+            _stateActionIndexMap.Add(2, SetUpMicroForAll);
+
+            VoiceStateHandler.Instance.onConnected += OnPhotonVoiceConnected;
+        }
+
+        private void OnDestroy() {
+            if(!ReferenceEquals(VoiceStateHandler.Instance, null)) {
+                VoiceStateHandler.Instance.onConnected -= OnPhotonVoiceConnected;
+            }
+        }
+
+#endregion
+
+#region Subscriptions
+
+        private void OnPhotonVoiceConnected() {
+            if (_lastState == -1) {
+                return;
+            }
+
+            if (_stateActionIndexMap.TryGetValue(_lastState, out var action)) {
+                action();
+            }
+        }
+
+#endregion
 
 #region Utils
 

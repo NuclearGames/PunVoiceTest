@@ -9,18 +9,19 @@ using Utilities.Core;
 
 namespace Networks {
     internal sealed class VoiceStateHandler : Singleton<VoiceStateHandler> {
+        internal event Action onConnected;
+        internal event Action onDisonnected;
+        
         private ClientState State => PhotonVoiceNetwork.Instance.ClientState;
         
         private bool _isDisabled = false;
 
-        private protected override void Awake() {
-            base.Awake();
-        }
-
         private void Start() {
-#if UNITY_EDITOR
             StartCoroutine(ClientStateHandlerCoroutine());
-#endif
+        }
+        
+        private void OnDisable() {
+            _isDisabled = true;
         }
 
         /// <summary>
@@ -39,17 +40,6 @@ namespace Networks {
             action.Invoke();
         }
         
-        private bool IsJoinedToRoom() {
-            return State == ClientState.Joined;
-        }
-
-        private void OnDisable() {
-            _isDisabled = true;
-        }
-        
-        
-#if UNITY_EDITOR
-        
         private ClientState _clientState;
         
         private IEnumerator ClientStateHandlerCoroutine() {
@@ -65,14 +55,33 @@ namespace Networks {
 
                 if (_clientState != newState) {
                     _clientState = newState;
+                    CheckEventState();
+                    
                     LogState();
                 }
             }
         }
 
-        private void LogState() {
-            Debug.Log($"[VOICE] New state: {_clientState.ToString()}");
+#region States
+
+        private bool IsJoinedToRoom() {
+            return State == ClientState.Joined;
         }
+
+        private void CheckEventState() {
+            if (_clientState == ClientState.Joined) {
+                onConnected?.Invoke();
+            } else if (_clientState == ClientState.Disconnected) {
+                onDisonnected?.Invoke();
+            }
+        }
+
+#endregion
+
+        private void LogState() {
+#if UNITY_EDITOR
+            Debug.Log($"[VOICE] New state: {_clientState.ToString()}");
 #endif
+        }
     }
 }

@@ -71,6 +71,11 @@ namespace VoiceScene.Logic {
             if (teamInfo.IsLocal && !voiceInfo.Player.IsLocal) {
                 voiceInterestGroupsHandler.AddGroup(in voiceInfo.DefaultRecordGroup);
             }
+
+            // Очень важный момент, иначе в текущей реализации при разговоре 1 на 1 противника будет не слышно, пока мы не сменим состояние
+            if (!voiceInfo.Player.IsLocal) {
+                voiceInterestGroupsHandler.Unmute();
+            }
         }
 
         private void RegisterInGroupSpeaker() {

@@ -65,6 +65,8 @@ namespace VoiceScene.Logic.Controller {
             
             if (muteState) {
                 interestGroupsHandler.MuteAll();   
+            } else {
+                interestGroupsHandler.Unmute();
             }
             _lockedCallBack = false;
         }

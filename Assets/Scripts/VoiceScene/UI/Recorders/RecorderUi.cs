@@ -10,6 +10,9 @@ using VoiceScene.Logic.Controller;
 
 namespace VoiceScene.UI.Recorders {
     internal sealed class RecorderUi: MonoBehaviour {
+        [SerializeField]
+        private GroupSpeakerController groupSpeakerController;
+        
         [Space]
         [SerializeField]
         private ButtonContainer lockMicroContainer;
@@ -66,6 +69,10 @@ namespace VoiceScene.UI.Recorders {
         }
 
         private void ActivateMic() {
+            if (!groupSpeakerController.AnyListening) {
+                return;
+            }
+            
             StartCoroutine(VoiceStateHandler.Instance.PerformAction(_recorder.StartRecording));
         }
         
@@ -135,6 +142,10 @@ namespace VoiceScene.UI.Recorders {
         
 #if UNITY_EDITOR
         private void OnValidate() {
+            if (ReferenceEquals(groupSpeakerController, null)) {
+                groupSpeakerController = FindObjectOfType<GroupSpeakerController>();
+            }
+            
             ValidateContainer(lockMicroContainer);
             ValidateContainer(teamMicroContainer);
             ValidateContainer(allMicroContainer);

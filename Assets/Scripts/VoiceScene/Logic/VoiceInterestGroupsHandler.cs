@@ -18,13 +18,6 @@ namespace VoiceScene.Logic {
         private readonly HashSet<byte> _groupsToListen = new HashSet<byte>();
 
         private WaitForSeconds _repeatWait;
-        
-        // internal void SetUpInitialInterestGroups(IEnumerable<byte> enableGroups) {
-        //     _groupsToListen.Clear();
-        //     enableGroups.ForEach(group => _groupsToListen.Add(group));
-        //     
-        //     _wasModified = true;
-        // }
 
 #region Monobehaviour
 

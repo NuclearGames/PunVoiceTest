@@ -2264,6 +2264,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d593f43413bd43aea25d610de9b50c7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  groupSpeakerController: {fileID: 1391354788}
   lockMicroContainer:
     button: {fileID: 101121183}
     image: {fileID: 101121184}
@@ -2891,6 +2892,7 @@ GameObject:
   - component: {fileID: 1994933330}
   - component: {fileID: 1994933329}
   - component: {fileID: 1994933328}
+  - component: {fileID: 1994933331}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -2946,6 +2948,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1994933331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1994933327}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba4477eaf4654a5494c36f4c107e42ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2030089339
 GameObject:
   m_ObjectHideFlags: 0

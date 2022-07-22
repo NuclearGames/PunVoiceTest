@@ -20,6 +20,8 @@ namespace VoiceScene.Logic.Controller {
         [SerializeField]
         private GroupSpeakerUiController allGroupUi;
 
+        internal bool AnyListening => CheckAnyListeningState(_teammates) || CheckAnyListeningState(_enemies);
+        
         private readonly List<PlayerVoiceInfoController> _teammates = new List<PlayerVoiceInfoController>();
         private readonly List<PlayerVoiceInfoController> _enemies = new List<PlayerVoiceInfoController>();
 

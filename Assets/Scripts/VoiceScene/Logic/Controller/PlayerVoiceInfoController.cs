@@ -80,7 +80,12 @@ namespace VoiceScene.Logic.Controller {
             }
 
             // В том случае, если чел в нашей команде, то тогда изменяем соответсвующим образом группу интересов
-            if (!_isLocalTeam || NetworkVoiceInfo.Player.IsLocal) {
+            if (_isLocalTeam) {
+                if (NetworkVoiceInfo.Player.IsLocal) {
+                    return;
+                }
+            } else {
+                _voiceInterestGroupsHandler.Unmute();
                 return;
             }
 
